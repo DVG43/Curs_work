@@ -1,8 +1,7 @@
 import requests
 from pprint import pprint
 
-# URL = 'https://api.vk.com/method/users.get'
-token = '958eb5d439726565e9333aa30e50e0f937ee432e927f0dbd541c541887d919a7c56f95c04217915c32008'
+token = '************'
 URL = 'https://api.vk.com/method/account.getProfileInfo'
 params = {
     'account':'begemot_korovin',
@@ -12,7 +11,7 @@ params = {
 res = requests.get(URL,params=params)
 pprint(res.json())
 
-#token = '958eb5d439726565e9333aa30e50e0f937ee432e927f0dbd541c541887d919a7c56f95c04217915c32008'
+
 URL = 'https://api.vk.com/method/photos.get'
 params = {
     'owner_id' : '552934290',
@@ -51,7 +50,7 @@ def geting_max_size_foto (list_of_size):
 #Получение название файла.
 def making_info_for_foto (any_foto):
     cvont_likes = any_foto['likes']['count']
-    date_foto = any_foto['likes']
+    date_foto = any_foto['date']
     name_of_file = f'{cvont_likes} {date_foto}'
     size_of_file = geting_max_size_foto(any_foto['sizes'])
     any_foto_info = {"file_name": name_of_file, "size":size_of_file}
@@ -64,15 +63,40 @@ for foto_in_list in foto_list:
     resalult_ror_every_foto.append(making_info_for_foto(foto_in_list))
     every_links_foto.append(geting_links_foto(foto_in_list['sizes']))
 
-pprint(resalult_ror_every_foto)
-pprint(every_links_foto)
+
+pprint(resalult_ror_every_foto) #печать файла с результатами
+pprint(every_links_foto) #печать ссылок фото
+
+class YaUploader:
+    def __init__(self, token: str):
+        self.token = token
+
+    def get_headers(self):
+        return {
+                'Content-Type': 'application/json',
+                'Authorization': 'OAuth {}'.format(self.token)
+        }
+
+    def get_upload_file(self, file_link, disk_file_path):
+        headers = self.get_headers()
+        upload_url = "https://cloud-api.yandex.net/v1/disk/resources/upload"
+        params = { "url": file_link, "path": disk_file_path, "overwrite": False}
+        r = requests.post(url=upload_url, params=params, headers=headers)
+        res = r.json()
+        pprint (res)
+
+#
+
+token_yandex = '***************'
+putloader = YaUploader(token_yandex)
+index = 0
+name_foto = ''
+for one_foto in every_links_foto:
+        n_foto = one_foto
+        name_foto = resalult_ror_every_foto[index]['file_name']
+        path_yandex = f'/photo/{name_foto}'
+        putloader.get_upload_file( n_foto, path_yandex)
+        index += 1
 
 
-#Подпрограмма  выделяющая  нужную ссылку на фото
 
-
-
-
-# account.getProfileInfo
-# begemot_korovin
-#.json()

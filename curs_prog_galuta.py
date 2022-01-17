@@ -9,13 +9,6 @@ from pprint import pprint
 # URL = 'https://api.vk.com/method/users.get'
 
 # Пишем класс для инициализации.
-# class Vk_user:
-#      URL = 'https://api.vk.com/method/'
-#      def __init__(self, token, version):
-#           self.params = {
-#                'access_token' : token,
-#                'v' : version
-#           }
 
 class VkUser:
     url = 'https://api.vk.com/method/'
@@ -25,13 +18,6 @@ class VkUser:
                  'v': version
         }
 # Пишем методы для класса.
-     # Параметры sort:
-     # 0 - по умолчанию
-     # 1 - по скорости роста
-     # 2 - по отошению дневной посещаемости
-     # 3 - по отношениею количества лайков к количеству пользователей
-     # 4 - по отношению количества комментариев к количеству пользоват
-     # 5 - по отношениею количества записей в обсуждениях к количеству пользователей
 
     def search_groups(self, q, sorting=0):
         group_search_url = self.url + 'groups.search'
