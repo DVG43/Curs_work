@@ -1,7 +1,10 @@
+import csv
+
 import requests
 from pprint import pprint
+import scv
 
-token = '************'
+token = '958eb5d439726565e9333aa30e50e0f937ee432e927f0dbd541c541887d919a7c56f95c04217915c32008'
 URL = 'https://api.vk.com/method/account.getProfileInfo'
 params = {
     'account':'begemot_korovin',
@@ -67,6 +70,7 @@ for foto_in_list in foto_list:
 pprint(resalult_ror_every_foto) #печать файла с результатами
 pprint(every_links_foto) #печать ссылок фото
 
+
 class YaUploader:
     def __init__(self, token: str):
         self.token = token
@@ -87,7 +91,7 @@ class YaUploader:
 
 #
 
-token_yandex = '***************'
+token_yandex = 'AQAAAABbqfAeAADLW0ZHggdGL0GIpWWHzWBa9gI'
 putloader = YaUploader(token_yandex)
 index = 0
 name_foto = ''
@@ -98,5 +102,9 @@ for one_foto in every_links_foto:
         putloader.get_upload_file( n_foto, path_yandex)
         index += 1
 
+with open('rezalt_file.txt', 'w') as f:
+    writer = csv.writer(f)
+    writer.writerow('список фотографий')
+    writer.writerows(resalult_ror_every_foto)
 
 
