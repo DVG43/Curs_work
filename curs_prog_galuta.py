@@ -4,31 +4,7 @@ from pprint import pprint
 import json
 
 
-token = '*******************'
-URL = 'https://api.vk.com/method/account.getProfileInfo'
-params = {
-    'account':'begemot_korovin',
-    'access_token' : token,
-    'v' : '5.131'
-}
-res_1 = requests.get(URL,params=params)
-pprint(res_1.json()) #Получаем данные пользователя
-res_2 = res_1.json()
-personal_id = str(res_2['response']['id'])#получили ID
 
-
-URL = 'https://api.vk.com/method/photos.get'#Получение фото со стены
-params = {
-    'owner_id' : f'{personal_id}',
-    'album_id' : 'profile',
-    'extended' : 1,
-    'photo_sizes' : 0,
-    'access_token' : token,
-    'v' : '5.131'
-}
-res = requests.get(URL,params=params)
-resalt = res.json()
-foto_list = resalt ['response'] ['items'] # Получен список фсех фото с параметрами фото
 
 #Получение ссылки на максимальный файл.
 def geting_links_foto (list_of_size):
@@ -60,13 +36,7 @@ def making_info_for_foto (any_foto):
     any_foto_info = {"file_name": name_of_file, "size":size_of_file}
     return any_foto_info
 
-#Общий алгоритм
-resalult_ror_every_foto = []
-every_links_foto = []
-for foto_in_list in foto_list:
-    resalult_ror_every_foto.append(making_info_for_foto(foto_in_list)) #Список для записи результата в файл и
-    # ормирования имени файла.
-    every_links_foto.append(geting_links_foto(foto_in_list['sizes'])) #Список ссылок на файлы которые уйдут в яндекс.
+
 
 
 #pprint(resalult_ror_every_foto) #печать файла с результатами
@@ -92,17 +62,55 @@ class YaUploader: #Класс для записи объекта на лиск �
         pprint (res)
 
 #
+if __name__ == '__main__':
 
-token_yandex = '*********************'
-putloader = YaUploader(token_yandex) #Запись элемента класса на диск яндекса
-index = 0
-name_foto = ''
-for one_foto in every_links_foto: #Цикл записи фото на яндекс диск
-        n_foto = one_foto
-        name_foto = resalult_ror_every_foto[index]['file_name']
-        path_yandex = f'/photo/{name_foto}'
-        putloader.get_upload_file( n_foto, path_yandex)
-        index += 1
+    # блок работы по получению фотографий из в контакте
+    token = '*******************'
+    URL = 'https://api.vk.com/method/account.getProfileInfo'
+    params = {
+        'account': 'begemot_korovin',
+        'access_token': token,
+        'v': '5.131'
+    }
+    res_1 = requests.get(URL, params=params)
+    pprint(res_1.json())  # Получаем данные пользователя
+    res_2 = res_1.json()
+    personal_id = str(res_2['response']['id'])  # получили ID
 
-with open('rezalt_file.json', 'w') as f: #Запись в корнефой каталог фвайла результа.
-    json.dump(resalult_ror_every_foto,f,indent = 2)
+    URL = 'https://api.vk.com/method/photos.get'  # Получение фото со стены
+    params = {
+        'owner_id': f'{personal_id}',
+        'album_id': 'profile',
+        'extended': 1,
+        'photo_sizes': 0,
+        'access_token': token,
+        'v': '5.131'
+    }
+    res = requests.get(URL, params=params)
+    resalt = res.json()
+    foto_list = resalt['response']['items']  # Получен список фсех фото с параметрами фото
+
+    # формирование переменных по полученным из вк данных
+    resalult_ror_every_foto = []
+    every_links_foto = []
+    for foto_in_list in foto_list:
+        resalult_ror_every_foto.append(making_info_for_foto(foto_in_list))  # Список для записи результата в файл и
+        # ормирования имени файла.
+        every_links_foto.append(
+            geting_links_foto(foto_in_list['sizes']))  # Список ссылок на файлы которые уйдут в яндекс.
+
+
+    # блок работы с яндексом
+    token_yandex = '*********************'
+    putloader = YaUploader(token_yandex) #Запись элемента класса на диск яндекса
+    index = 0
+    name_foto = ''
+    for one_foto in every_links_foto: #Цикл записи фото на яндекс диск
+            n_foto = one_foto
+            name_foto = resalult_ror_every_foto[index]['file_name']
+            path_yandex = f'/photo/{name_foto}'
+            putloader.get_upload_file( n_foto, path_yandex)
+            index += 1
+
+    with open('rezalt_file.json', 'w') as f: #Запись в корнефой каталог фвайла результа.
+        json.dump(resalult_ror_every_foto,f,indent = 2)
