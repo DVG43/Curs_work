@@ -3,9 +3,6 @@ import requests
 from pprint import pprint
 import json
 
-
-
-
 #Получение ссылки на максимальный файл.
 def geting_links_foto (list_of_size):
     links_of_foto = ''
@@ -36,9 +33,6 @@ def making_info_for_foto (any_foto):
     any_foto_info = {"file_name": name_of_file, "size":size_of_file}
     return any_foto_info
 
-
-
-
 #pprint(resalult_ror_every_foto) #печать файла с результатами
 #pprint(every_links_foto) #печать ссылок фото
 
@@ -53,6 +47,14 @@ class YaUploader: #Класс для записи объекта на лиск �
                 'Authorization': 'OAuth {}'.format(self.token)
         }
 
+    # def making_directory(self, name_directory):  # Метод класса для формирования папки.
+    #     headers = self.get_headers()
+    #     upload_url = "https://cloud-api.yandex.net/v1/disk/resources"
+    #     params = {"url": name_directory,  "overwrite": False}
+    #     r = requests.put(url=upload_url, params=params, headers=headers)
+    #     res = r.json()
+    #     pprint(res)
+
     def get_upload_file(self, file_link, disk_file_path): #Метод класса для записи файла на яндес.
         headers = self.get_headers()
         upload_url = "https://cloud-api.yandex.net/v1/disk/resources/upload"
@@ -61,11 +63,13 @@ class YaUploader: #Класс для записи объекта на лиск �
         res = r.json()
         pprint (res)
 
+
+
 #
 if __name__ == '__main__':
 
     # блок работы по получению фотографий из в контакте
-    token = '*******************'
+    token = '958eb5d439726565e9333aa30e50e0f937ee432e927f0dbd541c541887d919a7c56f95c04217915c32008'
     URL = 'https://api.vk.com/method/account.getProfileInfo'
     params = {
         'account': 'begemot_korovin',
@@ -76,6 +80,10 @@ if __name__ == '__main__':
     pprint(res_1.json())  # Получаем данные пользователя
     res_2 = res_1.json()
     personal_id = str(res_2['response']['id'])  # получили ID
+
+    # response = request["response"]
+    # if response["type"] != "user":
+    #     raise MyException("Невалидный идентифиикатор пользователя")
 
     URL = 'https://api.vk.com/method/photos.get'  # Получение фото со стены
     params = {
@@ -101,10 +109,13 @@ if __name__ == '__main__':
 
 
     # блок работы с яндексом
-    token_yandex = '*********************'
+    token_yandex = 'AQAAAABbqfAeAADLW0ZHggdGL0GIpWWHzWBa9gI'
     putloader = YaUploader(token_yandex) #Запись элемента класса на диск яндекса
     index = 0
     name_foto = ''
+
+    # putloader.making_directory("photo")
+
     for one_foto in every_links_foto: #Цикл записи фото на яндекс диск
             n_foto = one_foto
             name_foto = resalult_ror_every_foto[index]['file_name']
