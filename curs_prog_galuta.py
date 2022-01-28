@@ -78,12 +78,12 @@ class YaUploader: #Класс для записи объекта на лиск �
 
 #
 if __name__ == '__main__':
-
+    user_name = 'begemot_korovin'
     # блок работы по получению фотографий из в контакте
     token = '958eb5d439726565e9333aa30e50e0f937ee432e927f0dbd541c541887d919a7c56f95c04217915c32008'
     URL = 'https://api.vk.com/method/account.getProfileInfo'
     params = {
-        'account': 'begemot_korovin',
+        'account': f'{user_name}',
         'access_token': token,
         'v': '5.131'
     }
@@ -92,9 +92,10 @@ if __name__ == '__main__':
     res_2 = res_1.json()
     personal_id = str(res_2['response']['id'])  # получили ID
 
-    # response = request["response"]
-    # if response["type"] != "user":
-    #     raise MyException("Невалидный идентифиикатор пользователя")
+    response_1 = res_2["response"]  #преобразование логина к ID пользователя.
+    if response_1["screen_name"] != user_name:
+        print("Не верный пользователь для резерва фото")
+
 
     URL = 'https://api.vk.com/method/photos.get'  # Получение фото со стены
     params = {
@@ -126,8 +127,7 @@ if __name__ == '__main__':
     name_foto = ''
 
     marker = 0
-
-    for any_direct in putloader.geting_directory():
+    for any_direct in putloader.geting_directory(): #проверка наличия папки фото и при отсутсвии этой папки создание
         if any_direct ['name'] == 'photo':
             marker = 1
     if marker == 0:
