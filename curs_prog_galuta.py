@@ -50,16 +50,18 @@ class YaUploader: #Класс для записи объекта на лиск �
     def geting_directory(self):  # Метод класса для получения папки.
         headers = self.get_headers()
         upload_url = "https://cloud-api.yandex.net/v1/disk/resources"
-        params = {"overwrite": False}
+        params = {"path": '/', "overwrite": False}
         r = requests.get(url=upload_url, params=params, headers=headers)
         res = r.json()
-        pprint(res)
+        list_direct = res['_embedded']['items']
+        pprint(list_direct )
+        return list_direct
 
 
     def making_directory(self, name_directory):  # Метод класса для формирования папки.
         headers = self.get_headers()
         upload_url = "https://cloud-api.yandex.net/v1/disk/resources"
-        params = {"url": name_directory,  "overwrite": False}
+        params = {"path": name_directory,  "overwrite": False}
         r = requests.put(url=upload_url, params=params, headers=headers)
         res = r.json()
         pprint(res)
@@ -123,8 +125,14 @@ if __name__ == '__main__':
     index = 0
     name_foto = ''
 
-    putloader.geting_directory()
-    putloader.making_directory("/photo/")
+    marker = 0
+
+    for any_direct in putloader.geting_directory():
+        if any_direct ['name'] == 'photo':
+            marker = 1
+    if marker == 0:
+        putloader.making_directory("/photo/")
+
 
     for one_foto in every_links_foto: #Цикл записи фото на яндекс диск
             n_foto = one_foto
