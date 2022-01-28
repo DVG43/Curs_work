@@ -54,7 +54,7 @@ class YaUploader: #Класс для записи объекта на лиск �
         r = requests.get(url=upload_url, params=params, headers=headers)
         res = r.json()
         list_direct = res['_embedded']['items']
-        pprint(list_direct )
+        #pprint(list_direct )
         return list_direct
 
 
@@ -64,7 +64,7 @@ class YaUploader: #Класс для записи объекта на лиск �
         params = {"path": name_directory,  "overwrite": False}
         r = requests.put(url=upload_url, params=params, headers=headers)
         res = r.json()
-        pprint(res)
+        #pprint(res)
 
     def get_upload_file(self, file_link, disk_file_path): #Метод класса для записи файла на яндес.
         headers = self.get_headers()
@@ -80,7 +80,7 @@ class YaUploader: #Класс для записи объекта на лиск �
 if __name__ == '__main__':
     user_name = 'begemot_korovin'
     # блок работы по получению фотографий из в контакте
-    token = '958eb5d439726565e9333aa30e50e0f937ee432e927f0dbd541c541887d919a7c56f95c04217915c32008'
+    token = '********************************************'
     URL = 'https://api.vk.com/method/account.getProfileInfo'
     params = {
         'account': f'{user_name}',
@@ -121,7 +121,7 @@ if __name__ == '__main__':
 
 
     # блок работы с яндексом
-    token_yandex = 'AQAAAABbqfAeAADLW0ZHggdGL0GIpWWHzWBa9gI'
+    token_yandex = '************************'
     putloader = YaUploader(token_yandex) #Запись элемента класса на диск яндекса
     index = 0
     name_foto = ''
